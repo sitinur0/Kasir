@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kasir Pintar - Makanan & Minuman</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <header class="bg-primary text-white text-center py-3 shadow">
+        <h1><i class="fas fa-utensils"></i> POS Toko Makanan & Minuman</h1>
+    </header>
+
+    <div class="container-fluid mt-4">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                                <li class="nav-item">
+                                    <button class="nav-link active" id="pills-menu-tab" data-bs-toggle="pill" data-bs-target="#pills-menu" type="button">Daftar Menu</button>
+                                </li>
+                                <li class="nav-item">
+                                    <button class="nav-link" id="pills-history-tab" data-bs-toggle="pill" data-bs-target="#pills-history" type="button">Riwayat Transaksi</button>
+                                </li>
+                            </ul>
+                            <button class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#addMenuModal">
+                                <i class="fas fa-plus-circle"></i> Tambah Item Menu
+                            </button>
+                        </div>
+                        
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="pills-menu" role="tabpanel">
+                                <div id="menu-list" class="row g-3"></div>
+                            </div>
+                            <div class="tab-pane fade" id="pills-history" role="tabpanel">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5>Data Penjualan</h5>
+                                    <button id="export-history" class="btn btn-outline-danger btn-sm"><i class="fas fa-file-pdf"></i> Export PDF</button>
+                                </div>
+                                <ul id="history-list" class="list-group"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow sticky-top" style="top: 20px;">
+                    <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0"><i class="fas fa-shopping-cart"></i> Keranjang</h5>
+                        <button id="reset-cart" class="btn btn-warning btn-sm text-white">Reset</button>
+                    </div>
+                    <div class="card-body">
+                        <div id="cart-container" style="max-height: 350px; overflow-y: auto;">
+                            <ul id="cart-items" class="list-group list-group-flush mb-3"></ul>
+                        </div>
+                        <div class="border-top pt-3">
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <label class="small fw-bold">Diskon (%)</label>
+                                    <input type="number" id="discount" class="form-control" value="0" oninput="updateCart()">
+                                </div>
+                                <div class="col-6">
+                                    <label class="small fw-bold">Pajak (%)</label>
+                                    <input type="number" id="tax" class="form-control" value="10" oninput="updateCart()">
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between mb-1 text-muted"><span>Subtotal</span> <span>Rp <span id="subtotal">0</span></span></div>
+                            <div class="d-flex justify-content-between mb-1 text-danger"><span>Diskon</span> <span>-Rp <span id="discount-amount">0</span></span></div>
+                            <div class="d-flex justify-content-between mb-1"><span>Pajak</span> <span>+Rp <span id="tax-amount">0</span></span></div>
+                            <hr>
+                            <div class="d-flex justify-content-between fw-bold fs-4"><span>TOTAL</span> <span>Rp <span id="total">0</span></span></div>
+                            <button id="checkout" class="btn btn-success w-100 py-2 mt-3 fw-bold shadow-sm">BAYAR & CETAK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addMenuModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title">Tambah Produk Baru</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Nama Menu</label>
+                        <input type="text" id="new-menu-name" class="form-control" placeholder="Contoh: Jus Mangga">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Harga (Rp)</label>
+                        <input type="number" id="new-menu-price" class="form-control" placeholder="Contoh: 15000">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="addNewMenuItem()">Simpan Menu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
