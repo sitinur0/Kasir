@@ -139,4 +139,4 @@ function renderHistory() {
 
 // Inisialisasi awal
 renderMenu();
-renderHistory();
+renderHistory(); 
